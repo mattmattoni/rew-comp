@@ -24,7 +24,7 @@ for subj_dir in ${TASK1}*/; do
     fi
 done
 N_SUBS=${#SUBJECTS[@]}
-echo $SUBJECTS
+echo ${SUBJECTS[@]}
 
 
 #echo "Computing Task1 - Task2 differences for ${N_SUBS} subjects..."
