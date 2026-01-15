@@ -21,11 +21,10 @@ for subj_dir in ${TASK1}*/; do
     # Check if both contrast files exist
     if [ -f "${TASK1}${subj}/${TASK1_CON}" ] && [ -f "${TASK2}${subj}/${TASK2_CON}" ]; then
         SUBJECTS+=("${subj}")
-        echo "Found subject: ${subj}"
     fi
 done
 N_SUBS=${#SUBJECTS[@]}
-echo SUBJECTS
+echo $SUBJECTS
 
 
 #echo "Computing Task1 - Task2 differences for ${N_SUBS} subjects..."
