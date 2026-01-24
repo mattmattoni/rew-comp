@@ -20,19 +20,22 @@ exec 2>&1
 
 cd ${SCRATCH_DIR}
 
-TASK1="/mnt/Psych/UIC/FMRI_ANALYSIS_MID/DBBI/GLM_Results/"
-TASK2="/mnt/Psych/UIC/FMRI_ANALYSIS_DOORS/DBBI/GLM_Results/"
+TASK1="MID"
+TASK2="DOORS"
+
+TASK1_DIR="/mnt/Psych/UIC/FMRI_ANALYSIS_${TASK1}/DBBI/GLM_Results/"
+TASK2_DIR="/mnt/Psych/UIC/FMRI_ANALYSIS_${TASK2}/DBBI/GLM_Results/"
 
 TASK1_CON="con_0010.nii"
 TASK2_CON="con_0001.nii" #Check this
 
 # Build subject list
 SUBJECTS=()
-for subj_dir in ${TASK1}*/; do
+for subj_dir in ${TASK1_DIR}*/; do
     subj=$(basename ${subj_dir})
     
     # Check if both contrast files exist
-    if [ -f "${TASK1}${subj}/${TASK1_CON}" ] && [ -f "${TASK2}${subj}/${TASK2_CON}" ]; then
+    if [ -f "${TASK1_DIR}${subj}/${TASK1_CON}" ] && [ -f "${TASK2_DIR}${subj}/${TASK2_CON}" ]; then
         SUBJECTS+=("${subj}")
     fi
 done
@@ -45,8 +48,8 @@ echo "Creating difference images..."
 rm -f ${SCRATCH_DIR}/diff_list.txt
 for subj in "${SUBJECTS[@]}"; do
     echo "Processing ${subj}..."
-    fslmaths ${TASK1}/${subj}/${TASK1_CON} \
-             -sub ${TASK2}/${subj}/${TASK2_CON} \
+    fslmaths ${TASK1_DIR}/${subj}/${TASK1_CON} -nan \
+             -sub ${TASK2_DIR}/${subj}/${TASK2_CON} \
              ${SCRATCH_DIR}/${subj}_diff.nii.gz
     
     echo "${SCRATCH_DIR}/${subj}_diff.nii.gz" >> ${SCRATCH_DIR}/diff_list.txt
@@ -72,8 +75,8 @@ echo "Creating design matrix for one-sample t-test..."
 
 # Create contrast file (two-tailed)
 {
-    echo "/ContrastName1 MID_gt_Doors"
-    echo "/ContrastName2 Doors_gt_MID"
+    echo "/ContrastName1 ${TASK1}_gt_${TASK2}"
+    echo "/ContrastName2 ${TASK2}_gt_${TASK1}"
     echo "/NumWaves 1"
     echo "/NumContrasts 2"
     echo "/PPheights 1 1"
@@ -84,7 +87,8 @@ echo "Creating design matrix for one-sample t-test..."
     echo "-1"
 } > ${SCRATCH_DIR}/design.con
 
-## Create a brain mask (intermediate)
+
+# Create a brain mask
 #echo "Creating mask..."
 #fslmaths ${SCRATCH_DIR}/all_diffs.nii.gz -Tmean ${SCRATCH_DIR}/mean_diff
 #bet ${SCRATCH_DIR}/mean_diff ${SCRATCH_DIR}/mean_diff_brain -m -f 0.3
@@ -101,9 +105,4 @@ echo "Creating design matrix for one-sample t-test..."
 #          -T \
 #          --uncorrp
 #
-#echo "=========================================="
-#echo "Analysis complete!"
-#echo "Key outputs saved to: ${OUTPUT_DIR}"
-#echo "Intermediate files in: ${SCRATCH_DIR}"
-#echo "Log file: ${LOG_FILE}"
-#echo "=========================================="
+#echo "Analysis complete"
