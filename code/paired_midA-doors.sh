@@ -49,7 +49,7 @@ rm -f ${SCRATCH_DIR}/diff_list.txt
 for subj in "${SUBJECTS[@]}"; do
     echo "Processing ${subj}..."
     fslmaths ${TASK1_DIR}/${subj}/${TASK1_CON} -nan \
-             -sub ${TASK2_DIR}/${subj}/${TASK2_CON} \
+             -sub ${TASK2_DIR}/${subj}/${TASK2_CON} -nan \
              ${SCRATCH_DIR}/${subj}_diff.nii.gz
     
     echo "${SCRATCH_DIR}/${subj}_diff.nii.gz" >> ${SCRATCH_DIR}/diff_list.txt
