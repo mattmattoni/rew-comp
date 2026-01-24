@@ -3,7 +3,7 @@
 # Dirs & Subs
 OUTPUT_DIR="/mnt/Psych/UIC/mmattoni/reward_comparison/outputs/"
 SCRATCH_DIR="/mnt/Psych/UIC/mmattoni/reward_comparison/scratch/"
-LOG_DIR="/mnt/Psych/UIC/mmattoni/reward_comparison/logs/"
+LOG_DIR="/mnt/Psych/UIC/mmattoni/reward_comparison/rew-comp/logs/"
 
 # Create directories
 mkdir -p ${OUTPUT_DIR}
@@ -52,35 +52,38 @@ for subj in "${SUBJECTS[@]}"; do
     echo "${SCRATCH_DIR}/${subj}_diff.nii.gz" >> ${SCRATCH_DIR}/diff_list.txt
 done
 
-# Merge difference images into a 4D file (intermediate)
+# Merge difference images into a 4D file
 echo "Merging difference images..."
 fslmerge -t ${SCRATCH_DIR}/all_diffs.nii.gz $(cat ${SCRATCH_DIR}/diff_list.txt)
 
-## Create design matrix for one-sample t-test (intermediate)
-#echo "Creating design matrix for one-sample t-test..."
-#{
-#    echo "/NumWaves 1"
-#    echo "/NumPoints ${N_SUBS}"
-#    echo "/PPheights 1"
-#    echo ""
-#    echo "/Matrix"
-#    for ((i=0; i<N_SUBS; i++)); do
-#        echo "1"
-#    done
-#} > ${SCRATCH_DIR}/design.mat
-#
-## Create contrast file (intermediate)
-#{
-#    echo "/ContrastName1 Task1_gt_Task2"
-#    echo "/NumWaves 1"
-#    echo "/NumContrasts 1"
-#    echo "/PPheights 1"
-#    echo "/RequiredEffect 1"
-#    echo ""
-#    echo "/Matrix"
-#    echo "1"
-#} > ${SCRATCH_DIR}/design.con
-#
+
+# Create design matrix for one-sample t-test
+echo "Creating design matrix for one-sample t-test..."
+{
+    echo "/NumWaves 1"
+    echo "/NumPoints ${N_SUBS}"
+    echo "/PPheights 1"
+    echo ""
+    echo "/Matrix"
+    for ((i=0; i<N_SUBS; i++)); do
+        echo "1"
+    done
+} > ${SCRATCH_DIR}/design.mat
+
+# Create contrast file (two-tailed)
+{
+    echo "/ContrastName1 MID_gt_Doors"
+    echo "/ContrastName2 Doors_gt_MID"
+    echo "/NumWaves 1"
+    echo "/NumContrasts 2"
+    echo "/PPheights 1 1"
+    echo "/RequiredEffect 1 1"
+    echo ""
+    echo "/Matrix"
+    echo "1"
+    echo "-1"
+} > ${SCRATCH_DIR}/design.con
+
 ## Create a brain mask (intermediate)
 #echo "Creating mask..."
 #fslmaths ${SCRATCH_DIR}/all_diffs.nii.gz -Tmean ${SCRATCH_DIR}/mean_diff
