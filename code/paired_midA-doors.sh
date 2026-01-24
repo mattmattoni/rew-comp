@@ -56,51 +56,51 @@ done
 echo "Merging difference images..."
 fslmerge -t ${SCRATCH_DIR}/all_diffs.nii.gz $(cat ${SCRATCH_DIR}/diff_list.txt)
 
-# Create design matrix for one-sample t-test (intermediate)
-echo "Creating design matrix for one-sample t-test..."
-{
-    echo "/NumWaves 1"
-    echo "/NumPoints ${N_SUBS}"
-    echo "/PPheights 1"
-    echo ""
-    echo "/Matrix"
-    for ((i=0; i<N_SUBS; i++)); do
-        echo "1"
-    done
-} > ${SCRATCH_DIR}/design.mat
-
-# Create contrast file (intermediate)
-{
-    echo "/ContrastName1 Task1_gt_Task2"
-    echo "/NumWaves 1"
-    echo "/NumContrasts 1"
-    echo "/PPheights 1"
-    echo "/RequiredEffect 1"
-    echo ""
-    echo "/Matrix"
-    echo "1"
-} > ${SCRATCH_DIR}/design.con
-
-# Create a brain mask (intermediate)
-echo "Creating mask..."
-fslmaths ${SCRATCH_DIR}/all_diffs.nii.gz -Tmean ${SCRATCH_DIR}/mean_diff
-bet ${SCRATCH_DIR}/mean_diff ${SCRATCH_DIR}/mean_diff_brain -m -f 0.3
-mv ${SCRATCH_DIR}/mean_diff_brain_mask.nii.gz ${SCRATCH_DIR}/mask.nii.gz
-
-# Run randomise (output results to OUTPUT_DIR)
-echo "Running randomise (one-sample t-test on differences)..."
-randomise -i ${SCRATCH_DIR}/all_diffs.nii.gz \
-          -o ${OUTPUT_DIR}/paired_ttest \
-          -d ${SCRATCH_DIR}/design.mat \
-          -t ${SCRATCH_DIR}/design.con \
-          -m ${SCRATCH_DIR}/mask.nii.gz \
-          -n 5000 \
-          -T \
-          --uncorrp
-
-echo "=========================================="
-echo "Analysis complete!"
-echo "Key outputs saved to: ${OUTPUT_DIR}"
-echo "Intermediate files in: ${SCRATCH_DIR}"
-echo "Log file: ${LOG_FILE}"
-echo "=========================================="
+## Create design matrix for one-sample t-test (intermediate)
+#echo "Creating design matrix for one-sample t-test..."
+#{
+#    echo "/NumWaves 1"
+#    echo "/NumPoints ${N_SUBS}"
+#    echo "/PPheights 1"
+#    echo ""
+#    echo "/Matrix"
+#    for ((i=0; i<N_SUBS; i++)); do
+#        echo "1"
+#    done
+#} > ${SCRATCH_DIR}/design.mat
+#
+## Create contrast file (intermediate)
+#{
+#    echo "/ContrastName1 Task1_gt_Task2"
+#    echo "/NumWaves 1"
+#    echo "/NumContrasts 1"
+#    echo "/PPheights 1"
+#    echo "/RequiredEffect 1"
+#    echo ""
+#    echo "/Matrix"
+#    echo "1"
+#} > ${SCRATCH_DIR}/design.con
+#
+## Create a brain mask (intermediate)
+#echo "Creating mask..."
+#fslmaths ${SCRATCH_DIR}/all_diffs.nii.gz -Tmean ${SCRATCH_DIR}/mean_diff
+#bet ${SCRATCH_DIR}/mean_diff ${SCRATCH_DIR}/mean_diff_brain -m -f 0.3
+#mv ${SCRATCH_DIR}/mean_diff_brain_mask.nii.gz ${SCRATCH_DIR}/mask.nii.gz
+#
+## Run randomise (output results to OUTPUT_DIR)
+#echo "Running randomise (one-sample t-test on differences)..."
+#randomise -i ${SCRATCH_DIR}/all_diffs.nii.gz \
+#          -o ${OUTPUT_DIR}/paired_ttest \
+#          -d ${SCRATCH_DIR}/design.mat \
+#          -t ${SCRATCH_DIR}/design.con \
+#          -m ${SCRATCH_DIR}/mask.nii.gz \
+#          -n 5000 \
+#          -T \
+#          --uncorrp
+#
+#echo "=========================================="
+#echo "Analysis complete!"
+#echo "Key outputs saved to: ${OUTPUT_DIR}"
+#echo "Intermediate files in: ${SCRATCH_DIR}"
+#echo "Log file: ${LOG_FILE}"
+#echo "=========================================="
