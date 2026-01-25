@@ -89,20 +89,19 @@ echo "Creating design matrix for one-sample t-test..."
 
 
 # Create a brain mask
-#echo "Creating mask..."
-#fslmaths ${SCRATCH_DIR}/all_diffs.nii.gz -Tmean ${SCRATCH_DIR}/mean_diff
-#bet ${SCRATCH_DIR}/mean_diff ${SCRATCH_DIR}/mean_diff_brain -m -f 0.3
-#mv ${SCRATCH_DIR}/mean_diff_brain_mask.nii.gz ${SCRATCH_DIR}/mask.nii.gz
-#
-## Run randomise (output results to OUTPUT_DIR)
-#echo "Running randomise (one-sample t-test on differences)..."
-#randomise -i ${SCRATCH_DIR}/all_diffs.nii.gz \
-#          -o ${OUTPUT_DIR}/paired_ttest \
-#          -d ${SCRATCH_DIR}/design.mat \
-#          -t ${SCRATCH_DIR}/design.con \
-#          -m ${SCRATCH_DIR}/mask.nii.gz \
-#          -n 5000 \
-#          -T \
-#          --uncorrp
-#
-#echo "Analysis complete"
+echo "Creating mask..."
+fslmaths ${SCRATCH_DIR}/all_diffs.nii.gz -Tmean ${SCRATCH_DIR}/mean_diff
+fslmaths ${SCRATCH_DIR}/mean_diff -abs -bin ${SCRATCH_DIR}/mask.nii.gz
+
+# Run randomise (output results to OUTPUT_DIR)
+echo "Running randomise (one-sample t-test on differences)..."
+randomise -i ${SCRATCH_DIR}/all_diffs.nii.gz \
+          -o ${OUTPUT_DIR}/paired_ttest \
+          -d ${SCRATCH_DIR}/design.mat \
+          -t ${SCRATCH_DIR}/design.con \
+          -m ${SCRATCH_DIR}/mask.nii.gz \
+          -n 10000 \
+          -T \
+          --uncorrp
+
+echo "Analysis complete"
