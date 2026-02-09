@@ -88,10 +88,8 @@ echo "Creating design matrix for one-sample t-test..."
 } > ${SCRATCH_DIR}/design.con
 
 
-# Create a brain mask
-echo "Creating mask..."
-fslmaths ${SCRATCH_DIR}/all_diffs.nii.gz -Tmean ${SCRATCH_DIR}/mean_diff
-fslmaths ${SCRATCH_DIR}/mean_diff -abs -bin ${SCRATCH_DIR}/mask.nii.gz
+# Neurosynth mask
+MASK_FILE=${SCRATCH_DIR}/rbinary_mask_9_23.nii
 
 # Run randomise (output results to OUTPUT_DIR)
 echo "Running randomise (one-sample t-test on differences)..."
@@ -99,9 +97,9 @@ randomise -i ${SCRATCH_DIR}/all_diffs.nii.gz \
           -o ${OUTPUT_DIR}/paired_ttest \
           -d ${SCRATCH_DIR}/design.mat \
           -t ${SCRATCH_DIR}/design.con \
-          -m ${SCRATCH_DIR}/mask.nii.gz \
-          -n 10000 \
-          -T \
+          -m ${MASK_FILE} \
+          -n 500 \
+          -c 3.1 \
           --uncorrp
 
 echo "Analysis complete"
