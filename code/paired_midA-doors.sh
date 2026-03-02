@@ -89,7 +89,7 @@ echo "Creating design matrix for one-sample t-test..."
 
 
 # Neurosynth mask
-MASK_FILE="/mnt/Psych/UIC/mmattoni/reward_comparison/rew-comp/masks/resliced_mask/nii.gz"
+MASK_FILE="/mnt/Psych/UIC/mmattoni/reward_comparison/rew-comp/masks/resliced_mask.nii.gz"
 
 
 # Run randomise (output results to OUTPUT_DIR)
