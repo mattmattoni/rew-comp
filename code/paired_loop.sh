@@ -26,8 +26,8 @@ declare -A TASK_CONS
 # Task directories
 TASK_DIRS[MIDA]="/mnt/Psych/UIC/FMRI_ANALYSIS_MID/DBBI/GLM_Results/"
 TASK_DIRS[MIDC]="/mnt/Psych/UIC/FMRI_ANALYSIS_MID/DBBI/GLM_Results/"
-TASK_DIRS[Doors]="/mnt/Psych/UIC/FMRI_ANALYSIS_DOORS/DBBI/GLM_Results/"
-TASK_DIRS[GRT]="/mnt/Psych/UIC/FMRI_ANALYSIS_GRT/DBBI/GLM_Results/"  # UPDATE THIS PATH
+TASK_DIRS[DOORS]="/mnt/Psych/UIC/FMRI_ANALYSIS_DOORS/DBBI/GLM_Results/"
+TASK_DIRS[GRT]="/mnt/Psych/UIC/FMRI_ANALYSIS_GRT/DBBI/GLM_Results/" 
 
 # Task contrast files
 TASK_CONS[MIDA]="con_0010.nii" 
@@ -39,7 +39,7 @@ TASK_CONS[GRT]="con_0002.nii"
 MASK_FILE="/mnt/Psych/UIC/mmattoni/reward_comparison/rew-comp/masks/resliced_mask.nii.gz"
 
 # List of tasks
-TASKS=(MIDA MIDC Doors GRT)
+TASKS=(MIDA MIDC DOORS GRT)
 
 # Loop through all pairwise comparisons
 for ((i=0; i<${#TASKS[@]}; i++)); do
@@ -57,6 +57,15 @@ for ((i=0; i<${#TASKS[@]}; i++)); do
         # Create output subdirectory for this comparison
         COMP_OUTPUT="${OUTPUT_DIR}/${TASK1}_vs_${TASK2}/"
         mkdir -p ${COMP_OUTPUT}
+
+        # Check if analysis already exists
+        OUTPUT_FILE="${COMP_OUTPUT}/${TASK1}_vs_${TASK2}_clustere_corrp_tstat1.nii.gz"
+        if [ -f "${OUTPUT_FILE}" ]; then
+            echo "Output already exists, skipping analysis..."
+            echo "Found: ${OUTPUT_FILE}"
+            echo ""
+            continue
+        fi
         
         # Build subject list (subjects with both contrasts)
         SUBJECTS=()
