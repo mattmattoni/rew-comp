@@ -2,7 +2,7 @@
 
 # Dirs
 OUTPUT_DIR="/mnt/Psych/UIC/mmattoni/reward_comparison/outputs/"
-VIZ_DIR="/mnt/Psych/UIC/mmattoni/reward_comparison/visualizations/"
+VIZ_DIR="/mnt/Psych/UIC/mmattoni/reward_comparison/visualizations"
 
 # Create visualization directory
 mkdir -p ${VIZ_DIR}
@@ -32,8 +32,14 @@ for TASK in "${TASKS[@]}"; do
         # Mask t-stats by significant voxels
         fslmaths ${TSTAT_FILE} -mas ${VIZ_DIR}/${TASK}_sig_mask.nii.gz ${VIZ_DIR}/${TASK}_sig_tstats.nii.gz
         
+        # Reslice to match standard brain
+        flirt -in ${VIZ_DIR}/${TASK}_sig_tstats.nii.gz \
+              -ref ${UNDERLAY} \
+              -applyxfm -usesqform \
+              -out ${VIZ_DIR}/${TASK}_sig_tstats_resliced.nii.gz
+        
         # Create image (axial slices)
-        slicer ${UNDERLAY} ${VIZ_DIR}/${TASK}_sig_tstats.nii.gz \
+        slicer ${UNDERLAY} ${VIZ_DIR}/${TASK}_sig_tstats_resliced.nii.gz \
                -l ${FSLDIR}/etc/luts/renderjet.lut \
                -a ${VIZ_DIR}/${TASK}_activation.png
         
@@ -73,8 +79,14 @@ for COMP in "${COMPARISONS[@]}"; do
         fslmaths ${CORRP1} -thr 0.95 -bin ${VIZ_DIR}/${COMP}_contrast1_mask.nii.gz
         fslmaths ${TSTAT1} -mas ${VIZ_DIR}/${COMP}_contrast1_mask.nii.gz ${VIZ_DIR}/${COMP}_contrast1_tstats.nii.gz
         
+        # Reslice to match standard brain
+        flirt -in ${VIZ_DIR}/${COMP}_contrast1_tstats.nii.gz \
+              -ref ${UNDERLAY} \
+              -applyxfm -usesqform \
+              -out ${VIZ_DIR}/${COMP}_contrast1_tstats_resliced.nii.gz
+        
         # Create image
-        slicer ${UNDERLAY} ${VIZ_DIR}/${COMP}_contrast1_tstats.nii.gz \
+        slicer ${UNDERLAY} ${VIZ_DIR}/${COMP}_contrast1_tstats_resliced.nii.gz \
                -l ${FSLDIR}/etc/luts/renderjet.lut \
                -a ${VIZ_DIR}/${COMP}_${TASK1}_gt_${TASK2}.png
         
@@ -92,8 +104,14 @@ for COMP in "${COMPARISONS[@]}"; do
         fslmaths ${CORRP2} -thr 0.95 -bin ${VIZ_DIR}/${COMP}_contrast2_mask.nii.gz
         fslmaths ${TSTAT2} -mas ${VIZ_DIR}/${COMP}_contrast2_mask.nii.gz ${VIZ_DIR}/${COMP}_contrast2_tstats.nii.gz
         
+        # Reslice to match standard brain
+        flirt -in ${VIZ_DIR}/${COMP}_contrast2_tstats.nii.gz \
+              -ref ${UNDERLAY} \
+              -applyxfm -usesqform \
+              -out ${VIZ_DIR}/${COMP}_contrast2_tstats_resliced.nii.gz
+        
         # Create image
-        slicer ${UNDERLAY} ${VIZ_DIR}/${COMP}_contrast2_tstats.nii.gz \
+        slicer ${UNDERLAY} ${VIZ_DIR}/${COMP}_contrast2_tstats_resliced.nii.gz \
                -l ${FSLDIR}/etc/luts/renderjet.lut \
                -a ${VIZ_DIR}/${COMP}_${TASK2}_gt_${TASK1}.png
         
@@ -101,8 +119,9 @@ for COMP in "${COMPARISONS[@]}"; do
     fi
 done
 
-# Clean up temporary mask files
+# Clean up temporary files
 echo "Cleaning up temporary files..."
 rm -f ${VIZ_DIR}/*_mask.nii.gz
+rm -f ${VIZ_DIR}/*_resliced.nii.gz
 
 echo "Images saved in: ${VIZ_DIR}"
