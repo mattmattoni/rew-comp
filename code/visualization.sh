@@ -12,7 +12,7 @@ UNDERLAY="$FSLDIR/data/standard/MNI152_T1_2mm_brain"
 
 echo "Creating visualization images..."
 
-w# Group Activation Visualizations
+# Group Activation Visualizations
 echo "Processing group activations..."
 
 GROUP_DIR="${OUTPUT_DIR}/group_activation"
@@ -34,7 +34,7 @@ for TASK in "${TASKS[@]}"; do
         
         # Create image (axial slices)
         slicer ${UNDERLAY} ${VIZ_DIR}/${TASK}_sig_tstats.nii.gz \
-               -l /usr/share/fsl/5.0/etc/luts/renderjet.lut \
+               -l ${FSLDIR}/etc/luts/renderjet.lut \
                -a ${VIZ_DIR}/${TASK}_activation.png
         
         echo "Saved: ${VIZ_DIR}/${TASK}_activation.png"
@@ -75,7 +75,7 @@ for COMP in "${COMPARISONS[@]}"; do
         
         # Create image
         slicer ${UNDERLAY} ${VIZ_DIR}/${COMP}_contrast1_tstats.nii.gz \
-               -l /usr/share/fsl/5.0/etc/luts/renderjet.lut \
+               -l ${FSLDIR}/etc/luts/renderjet.lut \
                -a ${VIZ_DIR}/${COMP}_${TASK1}_gt_${TASK2}.png
         
         echo "Saved: ${VIZ_DIR}/${COMP}_${TASK1}_gt_${TASK2}.png"
@@ -94,7 +94,7 @@ for COMP in "${COMPARISONS[@]}"; do
         
         # Create image
         slicer ${UNDERLAY} ${VIZ_DIR}/${COMP}_contrast2_tstats.nii.gz \
-               -l /usr/share/fsl/5.0/etc/luts/renderjet.lut \
+               -l ${FSLDIR}/etc/luts/renderjet.lut \
                -a ${VIZ_DIR}/${COMP}_${TASK2}_gt_${TASK1}.png
         
         echo "Saved: ${VIZ_DIR}/${COMP}_${TASK2}_gt_${TASK1}.png"
