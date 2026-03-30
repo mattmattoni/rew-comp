@@ -104,16 +104,18 @@ for TASK in "${TASKS[@]}"; do
         done
     } > ${SCRATCH_DIR}/design_${TASK}.mat
     
-    # Create contrast file (one-tailed: activation > 0)
+    # Create contrast file (TWO contrasts: activation AND deactivation)
     {
         echo "/ContrastName1 ${TASK}_activation"
+        echo "/ContrastName2 ${TASK}_deactivation"
         echo "/NumWaves 1"
-        echo "/NumContrasts 1"
-        echo "/PPheights 1"
-        echo "/RequiredEffect 1"
+        echo "/NumContrasts 2"
+        echo "/PPheights 1 1"
+        echo "/RequiredEffect 1 1"
         echo ""
         echo "/Matrix"
         echo "1"
+        echo "-1"
     } > ${SCRATCH_DIR}/design_${TASK}.con
     
     # Run randomise
@@ -122,10 +124,11 @@ for TASK in "${TASKS[@]}"; do
               -o ${TASK_OUTPUT}/${TASK}_group \
               -d ${SCRATCH_DIR}/design_${TASK}.mat \
               -t ${SCRATCH_DIR}/design_${TASK}.con \
-              -n 500 \
-              -c 3.1 \
-              --uncorrp
+              -n 5000 \
+              -c 3.1
     
+    echo "${TASK} complete!"
+    echo ""
 done
 
 echo "All group activations complete"
