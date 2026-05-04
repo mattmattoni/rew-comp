@@ -51,12 +51,12 @@ for TASK in "${TASKS[@]}"; do
     
     # Check if analysis already exists
     OUTPUT_FILE="${TASK_OUTPUT}/${TASK}_group_clustere_corrp_tstat1.nii.gz"
-    if [ -f "${OUTPUT_FILE}" ]; then
-        echo "Output already exists, skipping analysis..."
-        echo "Found: ${OUTPUT_FILE}"
-        echo ""
-        continue
-    fi
+    #if [ -f "${OUTPUT_FILE}" ]; then
+    #    echo "Output already exists, skipping analysis..."
+    #    echo "Found: ${OUTPUT_FILE}"
+    #    echo ""
+    #    continue
+    #fi
     
     # Build subject list
     SUBJECTS=()
