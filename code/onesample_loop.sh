@@ -121,11 +121,13 @@ for TASK in "${TASKS[@]}"; do
     # Run randomise
     echo "Running randomise..."
     randomise -i ${SCRATCH_DIR}/all_${TASK}.nii.gz \
-              -o ${TASK_OUTPUT}/${TASK}_group \
-              -d ${SCRATCH_DIR}/design_${TASK}.mat \
-              -t ${SCRATCH_DIR}/design_${TASK}.con \
-              -n 5000 \
-              -c 3.1
+          -o ${TASK_OUTPUT}/${TASK}_group_tfce \
+          -d ${SCRATCH_DIR}/design_${TASK}.mat \
+          -t ${SCRATCH_DIR}/design_${TASK}.con \
+          -n 5000 \
+          -T \
+          -m /mnt/Psych/UIC/mmattoni/reward_comparison/rew-comp/masks/resliced_mask.nii.gz
+              
     
     echo "${TASK} complete!"
     echo ""
