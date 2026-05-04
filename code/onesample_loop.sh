@@ -121,7 +121,7 @@ for TASK in "${TASKS[@]}"; do
     # Run randomise
     echo "Running randomise..."
     randomise -i ${SCRATCH_DIR}/all_${TASK}.nii.gz \
-          -o ${TASK_OUTPUT}/${TASK}_group_tfce \
+          -o ${TASK_OUTPUT}/${TASK}_group_ \
           -d ${SCRATCH_DIR}/design_${TASK}.mat \
           -t ${SCRATCH_DIR}/design_${TASK}.con \
           -n 5000 \
