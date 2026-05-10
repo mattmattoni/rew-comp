@@ -47,7 +47,7 @@ for ((i=0; i<${#TASKS[@]}; i++)); do
         TASK1=${TASKS[$i]}
         TASK2=${TASKS[$j]}
         
-        echo "${TASK1} vs ${TASK2}"
+        echo "Processing ${TASK1} vs ${TASK2}"
         
         TASK1_DIR=${TASK_DIRS[$TASK1]}
         TASK2_DIR=${TASK_DIRS[$TASK2]}
@@ -55,11 +55,11 @@ for ((i=0; i<${#TASKS[@]}; i++)); do
         TASK2_CON=${TASK_CONS[$TASK2]}
         
         # Create output subdirectory for this comparison
-        COMP_OUTPUT="${OUTPUT_DIR}/${TASK1}_vs_${TASK2}/"
+        COMP_OUTPUT="${OUTPUT_DIR}/repeated/${TASK1}_vs_${TASK2}/"
         mkdir -p ${COMP_OUTPUT}
 
         # Check if analysis already exists
-        OUTPUT_FILE="${COMP_OUTPUT}/${TASK1}_vs_${TASK2}_clustere_corrp_tstat1.nii.gz"
+        OUTPUT_FILE="${COMP_OUTPUT}/${TASK1}_vs_${TASK2}_tfce_corrp_tstat1.nii.gz"
         if [ -f "${OUTPUT_FILE}" ]; then
             echo "Output already exists, skipping analysis..."
             echo "Found: ${OUTPUT_FILE}"
@@ -89,9 +89,35 @@ for ((i=0; i<${#TASKS[@]}; i++)); do
         rm -f ${SCRATCH_DIR}/diff_list_${TASK1}_${TASK2}.txt
         for subj in "${SUBJECTS[@]}"; do
             echo "Processing ${subj}..."
+
+            # Clean each image separately
             fslmaths ${TASK1_DIR}/${subj}/${TASK1_CON} -nan \
-                     -sub ${TASK2_DIR}/${subj}/${TASK2_CON} -nan \
+                     ${SCRATCH_DIR}/tmp_${subj}_${TASK1}.nii.gz
+
+            fslmaths ${TASK2_DIR}/${subj}/${TASK2_CON} -nan \
+                     ${SCRATCH_DIR}/tmp_${subj}_${TASK2}.nii.gz
+
+            # Create joint mask where BOTH tasks have valid data
+            fslmaths ${SCRATCH_DIR}/tmp_${subj}_${TASK1}.nii.gz -bin \
+                     ${SCRATCH_DIR}/tmp_mask1_${subj}.nii.gz
+            fslmaths ${SCRATCH_DIR}/tmp_${subj}_${TASK2}.nii.gz -bin \
+                     ${SCRATCH_DIR}/tmp_mask2_${subj}.nii.gz
+            fslmaths ${SCRATCH_DIR}/tmp_mask1_${subj}.nii.gz \
+                     -mul ${SCRATCH_DIR}/tmp_mask2_${subj}.nii.gz \
+                     ${SCRATCH_DIR}/tmp_bothmask_${subj}.nii.gz
+
+            # Subtract and apply joint mask
+            fslmaths ${SCRATCH_DIR}/tmp_${subj}_${TASK1}.nii.gz \
+                     -sub ${SCRATCH_DIR}/tmp_${subj}_${TASK2}.nii.gz \
+                     -mas ${SCRATCH_DIR}/tmp_bothmask_${subj}.nii.gz \
                      ${SCRATCH_DIR}/${subj}_diff_${TASK1}_${TASK2}.nii.gz
+
+            # Clean up temp files
+            rm -f ${SCRATCH_DIR}/tmp_${subj}_${TASK1}.nii.gz \
+                  ${SCRATCH_DIR}/tmp_${subj}_${TASK2}.nii.gz \
+                  ${SCRATCH_DIR}/tmp_mask1_${subj}.nii.gz \
+                  ${SCRATCH_DIR}/tmp_mask2_${subj}.nii.gz \
+                  ${SCRATCH_DIR}/tmp_bothmask_${subj}.nii.gz
             
             echo "${SCRATCH_DIR}/${subj}_diff_${TASK1}_${TASK2}.nii.gz" >> ${SCRATCH_DIR}/diff_list_${TASK1}_${TASK2}.txt
         done
@@ -114,7 +140,7 @@ for ((i=0; i<${#TASKS[@]}; i++)); do
             done
         } > ${SCRATCH_DIR}/design_${TASK1}_${TASK2}.mat
         
-        # Create contrast file (two-tailed)
+        # Create contrast file
         {
             echo "/ContrastName1 ${TASK1}_gt_${TASK2}"
             echo "/ContrastName2 ${TASK2}_gt_${TASK1}"
@@ -131,15 +157,16 @@ for ((i=0; i<${#TASKS[@]}; i++)); do
         # Run randomise
         echo "Running randomise..."
         randomise -i ${SCRATCH_DIR}/all_diffs_${TASK1}_${TASK2}.nii.gz \
-                  -o ${COMP_OUTPUT}/${TASK1}_vs_${TASK2} \
+                  -o ${COMP_OUTPUT}/${TASK1}_vs_${TASK2}_ \
                   -d ${SCRATCH_DIR}/design_${TASK1}_${TASK2}.mat \
                   -t ${SCRATCH_DIR}/design_${TASK1}_${TASK2}.con \
                   -m ${MASK_FILE} \
-                  -n 500 \
-                  -c 3.1 \
-                  --uncorrp
+                  -n 5000 \
+                  -T
         
         echo "${TASK1} vs ${TASK2} complete!"
         echo ""
     done
 done
+
+echo "All comparisons complete"
