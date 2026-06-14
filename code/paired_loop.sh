@@ -3,7 +3,7 @@
 OUTPUT_DIR="/mnt/Psych/UIC/mmattoni/reward_comparison/outputs/"
 SCRATCH_DIR="/mnt/Psych/UIC/mmattoni/reward_comparison/scratch/"
 LOG_DIR="/mnt/Psych/UIC/mmattoni/reward_comparison/rew-comp/logs/"
-SUBLIST_DIR="/mnt/Psych/UIC/mmattoni/reward_comparison/rew-comp/sublists/"
+SUBLIST_DIR="/mnt/Psych/UIC/mmattoni/reward_comparison/rew-comp/logs/"
 
 mkdir -p ${OUTPUT_DIR}
 mkdir -p ${SCRATCH_DIR}
