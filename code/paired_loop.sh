@@ -29,14 +29,14 @@ TASK_DIRS[GRT]="/mnt/Psych/UIC/FMRI_ANALYSIS_GRT/DBBI/GLM_Results/"
 # Task contrast files
 TASK_CONS[MIDA]="con_0010.nii"
 TASK_CONS[MIDC]="con_0028.nii"
-TASK_CONS[DOORS]="con_0001.nii"
-TASK_CONS[GRT]="con_0002.nii"
+TASK_CONS[DOORS]="con_0003.nii"
+TASK_CONS[GRT]="con_0003.nii"
 
 # Sublist files (MIDA/MIDC share)
-TASK_SUBLISTS[MIDA]="sublist_MID.txt"
-TASK_SUBLISTS[MIDC]="sublist_MID.txt"
-TASK_SUBLISTS[DOORS]="sublist_DOORS.txt"
-TASK_SUBLISTS[GRT]="sublist_GRT.txt"
+TASK_SUBLISTS[MIDA]="sublist.txt"
+TASK_SUBLISTS[MIDC]="sublist.txt"
+TASK_SUBLISTS[DOORS]="sublist.txt"
+TASK_SUBLISTS[GRT]="sublist.txt"
 
 MASK_FILE="/mnt/Psych/UIC/mmattoni/reward_comparison/rew-comp/masks/resliced_mask.nii.gz"
 
