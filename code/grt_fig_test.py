@@ -15,7 +15,7 @@ N_CUTS = 7
 FIG_DIR = os.path.join(BASE, "figures", "GRT_test")
 os.makedirs(FIG_DIR, exist_ok=True)
 
-BG_PATH = os.path.join(FIG_DIR, "mni_bg.nii.gz")
+BG_PATH = os.path.join(BASE, "figures")
 bg = nib.load(BG_PATH).get_fdata() if os.path.isfile(BG_PATH) else None
 
 def load_thr(task, idx):
