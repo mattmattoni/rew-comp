@@ -30,7 +30,7 @@ TASK_DIRS[GRT]="/mnt/Psych/UIC/FMRI_ANALYSIS_GRT/DBBI/GLM_Results/"
 TASK_CONS[MIDA]="con_0010.nii"
 TASK_CONS[MIDC]="con_0028.nii"
 TASK_CONS[DOORS]="con_0003.nii" #Change 0003
-TASK_CONS[GRT]="con_0003.nii" #Change 0003
+TASK_CONS[GRT]="con_0008.nii" #Change 0003
 
 # Sublist files (MIDA/MIDC share)
 TASK_SUBLISTS[MIDA]="sublist.txt"
