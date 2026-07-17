@@ -12,10 +12,10 @@ TASKS = ["GRT"]
 PTHR = 0.95
 N_CUTS = 7
 
-FIG_DIR = os.path.join(BASE, "figures", "GRT_test")
+FIG_DIR = os.path.join(BASE, "figures")
 os.makedirs(FIG_DIR, exist_ok=True)
 
-BG_PATH = os.path.join(BASE, "figures", "mni_bg.nii.gz")
+BG_PATH = "/mnt/Psych/UIC/mmattoni/reward_comparison/outputs/group_activation/figures
 bg = nib.load(BG_PATH).get_fdata() if os.path.isfile(BG_PATH) else None
 
 def load_thr(task, idx):
