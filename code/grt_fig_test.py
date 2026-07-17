@@ -7,7 +7,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-BASE = "/mnt/Psych/UIC/mmattoni/reward_comparison/outputs/group_activation"
+BASE = "/mnt/Psych/UIC/mmattoni/reward_comparison/outputs/group_activation/GRT_test"
 TASKS = ["GRT"]
 PTHR = 0.95
 N_CUTS = 7
