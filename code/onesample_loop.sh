@@ -24,21 +24,26 @@ declare -A TASK_SUBLISTS
 TASK_DIRS[MIDA]="/mnt/Psych/UIC/FMRI_ANALYSIS_MID/DBBI/GLM_Results/"
 TASK_DIRS[MIDC]="/mnt/Psych/UIC/FMRI_ANALYSIS_MID/DBBI/GLM_Results/"
 TASK_DIRS[DOORS]="/mnt/Psych/UIC/FMRI_ANALYSIS_DOORS/DBBI/GLM_Results/"
-TASK_DIRS[GRT]="/mnt/Psych/UIC/FMRI_ANALYSIS_GRT/DBBI/GLM_Results/"
+TASK_DIRS[GRTA]="/mnt/Psych/UIC/FMRI_ANALYSIS_GRT/DBBI/GLM_Results/"
+TASK_DIRS[GRTC]="/mnt/Psych/UIC/FMRI_ANALYSIS_GRT/DBBI/GLM_Results/"
+
 
 # Task contrast files
 TASK_CONS[MIDA]="con_0010.nii"
 TASK_CONS[MIDC]="con_0028.nii"
-TASK_CONS[DOORS]="con_0003.nii" #Change 0003
-TASK_CONS[GRT]="con_0003.nii" #Change 0003
+TASK_CONS[DOORS]="con_0003.nii"
+TASK_CONS[GRTA]="con_0008.nii" 
+TASK_CONS[GRTC]="con_0003.nii" 
 
-# Sublist files (MIDA/MIDC share)
+
+# Sublist files
 TASK_SUBLISTS[MIDA]="sublist.txt"
 TASK_SUBLISTS[MIDC]="sublist.txt"
 TASK_SUBLISTS[DOORS]="sublist.txt"
-TASK_SUBLISTS[GRT]="sublist.txt"
+TASK_SUBLISTS[GRTA]="sublist.txt"
+TASK_SUBLISTS[GRTC]="sublist.txt"
 
-TASKS=(MIDA MIDC DOORS GRT)
+TASKS=(MIDA MIDC DOORS GRTA GRTC)
 
 for TASK in "${TASKS[@]}"; do
     echo "Group activation for ${TASK}"
