@@ -8,7 +8,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 BASE = "/mnt/Psych/UIC/mmattoni/reward_comparison/outputs/group_activation"
-TASKS = ["MIDA", "MIDC", "DOORS", "GRT"]
+TASKS = ["MIDA", "MIDC", "DOORS", "GRTA", "GRTC"]
 PTHR = 0.95
 N_CUTS = 7
 
